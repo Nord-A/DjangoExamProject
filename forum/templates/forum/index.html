@@ -1,10 +1,30 @@
+{% extends "forum/base.html" %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Home</title>
 </head>
 <body>
+    <div class="container">
+        <h1>Index page!</h1>
 
+        <p>
+            Welcome to Developer Forum
+            Developer Forum is a question and answer site for seeking peer review of your code.
+            It's built and run by you as part of the Stack Exchange network of Q&A sites.
+            We're working together to improve the skills of programmers worldwide by taking working code and making it better.
+            Ask questions, get answers, no distractions
+        </p>
+
+        <table class="table">
+         <th>Title</th>
+        {% for thread in data %}
+           <tr>{{ thread.title }}</tr>
+        {% endfor %}
+        </table>
+    </div>
 </body>
 </html>
+{% endblock content %}

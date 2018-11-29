@@ -10,7 +10,7 @@ class ForumUser(models.Model):
     email = models.EmailField()
     datetime_created = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
-    image = models.ImageField()
+    # image = models.ImageField()
 
     def __str__(self):
         return self.username
