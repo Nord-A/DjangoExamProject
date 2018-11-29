@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class ForumUser(models.Model):
@@ -7,7 +8,7 @@ class ForumUser(models.Model):
     password = models.CharField(max_length=20)
     # email = models.CharField(max_length=30)
     email = models.EmailField()
-    datetime_created = models.DateField()
+    datetime_created = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     image = models.ImageField()
 
@@ -39,8 +40,8 @@ class ForumThread(models.Model):
 class Comment(models.Model):
     content = models.TextField(max_length=2000) #Limit?
     thread = models.ForeignKey(ForumThread, on_delete=models.CASCADE, null=True)
-    datetime_created = models.DateField()
-    datetime_edited = models.DateField()
+    datetime_created = models.DateTimeField(default=timezone.now)
+    datetime_edited = models.DateTimeField(default=timezone.now)
     #Can a comment be commented on?
 
     def __str__(self):
