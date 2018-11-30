@@ -43,6 +43,7 @@ class Comment(models.Model):
     datetime_created = models.DateTimeField(default=timezone.now)
     datetime_edited = models.DateTimeField(default=timezone.now)
     #Can a comment be commented on?
+    # File upload PDF, other
 
     def __str__(self):
         return self.content
