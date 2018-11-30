@@ -1,0 +1,21 @@
+{% extends "forum/base.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="post">
+            {% csrf_token %} <!-- Cross-site request forgery tag, for security reasons! -->
+            <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Join our site!</legend>
+                {{ form }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Join!</button>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already on our team? <a class="ml-2" href="#">Sign In</a>
+            </small>
+        </div>
+    </div>
+
+{% endblock content %}
