@@ -2,7 +2,7 @@
 {% block content %}
     <div class="content-section">
         <form method="post">
-            {% csrf_token %} <!-- Cross-site request forgery tag, for security reasons! -->
+            {% csrf_token %} <!-- Cross-site request forgery tag, for security reasons. Django requires this! -->
             <fieldset class="form-group">
                     <legend class="border-bottom mb-4">Join our site!</legend>
                 {{ form }}
