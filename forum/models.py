@@ -6,9 +6,8 @@ class ForumUser(models.Model):
     name = models.CharField(max_length=30)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
-    # email = models.CharField(max_length=30)
     email = models.EmailField()
-    datetime_created = models.DateTimeField(default=timezone.now)
+    datetime_created = models.DateTimeField(default=timezone.now, editable=False)
     is_active = models.BooleanField(default=True)
     # image = models.ImageField()
 
@@ -25,22 +24,29 @@ class Topic(models.Model):
 
 class ForumThread(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
-    title = models.CharField(max_length=30)
+    title = models.CharField(max_length=100)
     owner = models.ForeignKey(ForumUser, on_delete=models.CASCADE)
     question = models.TextField(max_length=2000) #Limit?
-    datetime_created = models.DateField()
-    datetime_edited = models.DateField()
+    datetime_created = models.DateTimeField(default=timezone.now, editable=False)
+    datetime_edited = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
-    views_count = models.IntegerField()
+    views_count = models.IntegerField(default=0)
+    #Likes/dislikes?
 
     def __str__(self):
         return self.title
+    # Overload save method. copy pasted
+    # def save(self, *args, **kwargs):
+    #     # if not self.id:
+    #     #     self.datetime_created = timezone
+    #     self.datetime_edited = timezone.now()
+    #     return super(ForumThread, self).save(*args, **kwargs)
 
 
 class Comment(models.Model):
     content = models.TextField(max_length=2000) #Limit?
     thread = models.ForeignKey(ForumThread, on_delete=models.CASCADE, null=True)
-    datetime_created = models.DateTimeField(default=timezone.now)
+    datetime_created = models.DateTimeField(default=timezone.now, editable=False)
     datetime_edited = models.DateTimeField(default=timezone.now)
     #Can a comment be commented on?
     # File upload PDF, other

@@ -1,4 +1,5 @@
-{#{% load static %}#}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,23 +9,40 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-{#    <link rel="stylesheet" type="text/css" href="{% static 'forum/style.css' %}">#}
-
-    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'forum/style.css' %}">
+    {% block title %}
+    {% endblock title %}
+{#    <title>Title</title>#}
 </head>
 <body>
      <nav class="navbar navbar-default">
       <div class="container-fluid" style="background-color: #21b286">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#" style="color: #EEE;">Developer Forum</a>
+          <a class="navbar-brand" href="{% url 'forum-index' %}" style="color: #EEE;">Developer Forum</a>
         </div>
         <ul class="nav navbar-nav">
-          <li><a href="{% url 'forum-login' %}">Login</a></li>
-          <li><a href="{% url 'forum-index' %}">Index</a></li>
+            <li><a href="{% url 'forum-index' %}">Index</a></li>
+            <li><a href="{% url 'forum-createthread' %}">Create Thread</a></li>
+            <li><a href="{% url 'forum-viewallthreads' %}">View Threads</a></li>
         </ul>
       </div>
     </nav>
+
+{#<nav class="navbar navbar-expand-sm bg-light navbar-light">#}
+{#  <!-- Links -->#}
+{#  <ul class="navbar-nav">#}
+{#    <li class="nav-item">#}
+{#      <a class="navbar-brand" href="{% url 'forum-index' %}" style="color: #EEE;">Developer Forum</a>#}
+{#    </li>#}
+{#    <li class="nav-item">#}
+{#      <a href="{% url 'forum-createthread' %}">Create Thread</a>#}
+{#    </li>#}
+{#    <li class="nav-item">#}
+{#      <a href="{% url 'forum-viewallthreads' %}">View Threads</a>#}
+{#    </li>#}
+{#  </ul>#}
+{#</nav>#}
+
 {#    <header>#}
 {#        <a href="{% url 'forum-login' %}">Login</a>#}
 {#    </header>#}

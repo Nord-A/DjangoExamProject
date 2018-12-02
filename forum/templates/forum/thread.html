@@ -1,0 +1,16 @@
+{% extends "forum/base.html" %}
+{% block title %}
+    <title>View Thread</title>
+{% endblock title %}
+{% block content %}
+    <div class="container">
+        <h1>View Thread Page!</h1>
+        <h2>{{ thread.title }}</h2>
+        <h2>{{ thread.topic.name }}</h2>
+        <p>{{ thread.datetime_created }}</p>
+        <p>{{ thread.views_count }}</p>
+        <p>{{ thread.question }}</p>
+
+{#        Fix comments#}
+    </div>
+{% endblock content %}

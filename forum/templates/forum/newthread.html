@@ -1,0 +1,14 @@
+{% extends "forum/base.html" %}
+{% block title %}
+    <title>Create Thread</title>
+{% endblock title %}
+{% block content %}
+    <div class="container">
+        <h1>New Thread</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+{% endblock content %}

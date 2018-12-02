@@ -1,32 +1,28 @@
 {% extends "forum/base.html" %}
 {% block title %}
-    <title>Index</title>
+    <title>View Own Threads</title>
 {% endblock title %}
 {% block content %}
     <div class="container">
-        <h1>Index page!</h1>
-
-        <p>
-            Welcome to Developer Forum
-            Developer Forum is a question and answer site for seeking peer review of your code.
-            It's built and run by you as part of the Stack Exchange network of Q&A sites.
-            We're working together to improve the skills of programmers worldwide by taking working code and making it better.
-            Ask questions, get answers, no distractions
-        </p>
+        <h1>Ownthreads page!</h1>
 
         <table class="table">
         <thead>
             <tr>
                 <th>Views</th>
+{#                <th>Poppularity/Likes</th>#}
                 <th>Title</th>
                 <th>Asked</th>
+                <th></th>
             </tr>
         </thead>
         {% for thread in data %}
             <tr>
                 <td>{{ thread.views_count }}</td>
+{#                <td>{{ thread.likes }}</td>#}
                 <td><a href="{% url 'forum-viewthread' forum_thread_id=thread.id %}">{{ thread.title }}</a></td>
                 <td>{{ thread.datetime_created }}</td>
+{#                <a href="{% url 'forum-editthread/thread.id' %}" class="btn">Edit</a>#}
             </tr>
         {% endfor %}
         </table>
