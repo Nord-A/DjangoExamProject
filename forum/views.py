@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.db import models
-from .models import ForumThread, ForumUser
+from .models import ForumThread #, ForumUser
 from .forms import ThreadForm
 from django.http import HttpResponseRedirect
 from django.utils import timezone
+from users.models import User
+from django.forms.models import model_to_dict
 
 
 def index(request):
@@ -41,7 +43,8 @@ def create_thread(request):
             #Trying to save with logged in user
             # current_user = request.user  # Get current logged in user
             # if current_user.is_authenticated():
-            current_user = ForumUser.objects.all()[0]  # Test user, remove after django user has been implemented
+            # current_user = ForumUser.objects.all()[0]  # Test user, remove after django user has been implemented
+            current_user = User.objects.all()[0]  # Test user, remove after django user has been implemented
             # Attempt 1
             new_thread = form.save(commit=False)  # returns object, does not save
             new_thread.owner = current_user
@@ -50,7 +53,7 @@ def create_thread(request):
             # Attempt 2
             # form.instance.user = request.user
             # form.save()
-        return HttpResponseRedirect('/index')
+        return HttpResponseRedirect('/index')  # Make successpage? FIX Redirect path. redirect to the thread page?
     else:
         form = ThreadForm()
         return render(request, 'forum/newthread.html', {'form': form})
@@ -75,10 +78,11 @@ def edit_thread(request, forum_thread_id):
             # question = updated_thread.cleaned_data['question']
             # the_thread = ForumThread(title=title, topic=topic, question=question, datetime_edited=timezone.now())
             # the_thread.save()
-        return HttpResponseRedirect('index')  # Make successpage?
+        return HttpResponseRedirect('index')  # Make successpage? FIX Redirect path
     else:
         thread = get_object_or_404(ForumThread, pk=forum_thread_id)
-        form = ThreadForm()
+        # form = ThreadForm()
+        form = ThreadForm(initial=model_to_dict(thread)) #Remove model_to_dict?
         return render(request, 'forum/newthread.html', {'form': form})  # Reuse HTML page or make new one?
 
 

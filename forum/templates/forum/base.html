@@ -15,18 +15,18 @@
 {#    <title>Title</title>#}
 </head>
 <body>
-     <nav class="navbar navbar-default">
-      <div class="container-fluid" style="background-color: #21b286">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="{% url 'forum-index' %}" style="color: #EEE;">Developer Forum</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="{% url 'forum-index' %}">Index</a></li>
-            <li><a href="{% url 'forum-createthread' %}">Create Thread</a></li>
-            <li><a href="{% url 'forum-viewallthreads' %}">View Threads</a></li>
-        </ul>
-      </div>
-    </nav>
+{#     <nav class="navbar navbar-default">#}
+{#      <div class="container-fluid" style="background-color: #21b286">#}
+{#        <div class="navbar-header">#}
+{#          <a class="navbar-brand" href="{% url 'forum-index' %}" style="color: #EEE;">Developer Forum</a>#}
+{#        </div>#}
+{#        <ul class="nav navbar-nav">#}
+{#            <li><a href="{% url 'forum-index' %}">Index</a></li>#}
+{#            <li><a href="{% url 'forum-createthread' %}">Create Thread</a></li>#}
+{#            <li><a href="{% url 'forum-viewallthreads' %}">View Threads</a></li>#}
+{#        </ul>#}
+{#      </div>#}
+{#    </nav>#}
 
 {#<nav class="navbar navbar-expand-sm bg-light navbar-light">#}
 {#  <!-- Links -->#}
@@ -42,6 +42,17 @@
 {#    </li>#}
 {#  </ul>#}
 {#</nav>#}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{% url 'forum-index' %}">Developer Forum</a>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'forum-index' %}">Index</a>
+            <a class="nav-item nav-link" href="{% url 'forum-createthread' %}">Create Thread</a>
+            <a class="nav-item nav-link" href="{% url 'forum-viewallthreads' %}">View Threads</a>
+        </div>
+      </div>
+    </nav>
 
 {#    <header>#}
 {#        <a href="{% url 'forum-login' %}">Login</a>#}

@@ -22,7 +22,7 @@
 {#                <td>{{ thread.likes }}</td>#}
                 <td><a href="{% url 'forum-viewthread' forum_thread_id=thread.id %}">{{ thread.title }}</a></td>
                 <td>{{ thread.datetime_created }}</td>
-{#                <a href="{% url 'forum-editthread/thread.id' %}" class="btn">Edit</a>#}
+                <a href="{% url 'forum-editthread/thread.id' %}" class="btn">Edit</a>
             </tr>
         {% endfor %}
         </table>
