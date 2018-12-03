@@ -43,6 +43,7 @@ def create_thread(request):
             #Trying to save with logged in user
             # current_user = request.user  # Get current logged in user
             # if current_user.is_authenticated():
+
             # current_user = ForumUser.objects.all()[0]  # Test user, remove after django user has been implemented
             current_user = User.objects.all()[0]  # Test user, remove after django user has been implemented
             # Attempt 1
@@ -88,8 +89,8 @@ def edit_thread(request, forum_thread_id):
 
 def view_thread(request, forum_thread_id):
     thread = get_object_or_404(ForumThread, pk=forum_thread_id)
-    thread.views_count += 1
-    thread.save()
+    # thread.views_count += 1
+    # thread.save()
     return render(request, 'forum/thread.html', {'thread': thread})
 
 
