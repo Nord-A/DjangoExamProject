@@ -17,4 +17,6 @@ urlpatterns = [
 
     # localhost:8000/forum/editthread || localhost:8000/editthread
     path('editthread/<int:forum_thread_id>', views.edit_thread, name='forum-editthread'),
+
+    path('viewownthreads/', views.view_own_threads, name='forum-viewownthreads'),
 ]

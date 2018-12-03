@@ -6,6 +6,10 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 from users.models import User
 from django.forms.models import model_to_dict
+from django.http import HttpResponseForbidden
+
+# def helper_user_has_permission(user):
+#     user.
 
 
 def index(request):
@@ -54,7 +58,7 @@ def create_thread(request):
             # Attempt 2
             # form.instance.user = request.user
             # form.save()
-        return HttpResponseRedirect('/index')  # Make successpage? FIX Redirect path. redirect to the thread page?
+        return HttpResponseRedirect('/thread/{}'.format(new_thread.id))  # Make successpage?
     else:
         form = ThreadForm()
         return render(request, 'forum/newthread.html', {'form': form})
@@ -79,18 +83,26 @@ def edit_thread(request, forum_thread_id):
             # question = updated_thread.cleaned_data['question']
             # the_thread = ForumThread(title=title, topic=topic, question=question, datetime_edited=timezone.now())
             # the_thread.save()
-        return HttpResponseRedirect('index')  # Make successpage? FIX Redirect path
+        return HttpResponseRedirect('/thread/{}'.format(updated_thread_withdate.id))  # Make successpage?
     else:
         thread = get_object_or_404(ForumThread, pk=forum_thread_id)
         # form = ThreadForm()
         form = ThreadForm(initial=model_to_dict(thread)) #Remove model_to_dict?
-        return render(request, 'forum/newthread.html', {'form': form})  # Reuse HTML page or make new one?
+
+        # Trying to validate logged in user
+        # current_user = request.user  # Get current logged in user
+        # if current_user.is_authenticated():
+        current_user = User.objects.all()[0]  # Test user, remove after django user has been implemented
+        if current_user == thread.owner:
+            return render(request, 'forum/newthread.html', {'form': form})  # Reuse HTML page or make new one?
+        else:
+            return HttpResponseForbidden()
 
 
 def view_thread(request, forum_thread_id):
     thread = get_object_or_404(ForumThread, pk=forum_thread_id)
-    # thread.views_count += 1
-    # thread.save()
+    thread.views_count += 1
+    thread.save()
     return render(request, 'forum/thread.html', {'thread': thread})
 
 
@@ -101,3 +113,19 @@ def view_all_threads(request):
         'data': data
     }
     return render(request, 'forum/allthreads.html', context)
+
+
+def view_own_threads(request):
+    # Get threads from DB
+    # data = get_list_or_404(ForumThread)
+
+    # Trying to get current user
+    # current_user = request.user  # Get current logged in user
+    # if current_user.is_authenticated():
+    current_user = User.objects.all()[0]  # Test user, remove after django user has been implemented
+
+    data = ForumThread.objects.filter(owner=current_user)
+    context = {
+        'data': data
+    }
+    return render(request, 'forum/ownthreads.html', context)
