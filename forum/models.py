@@ -51,6 +51,7 @@ class Comment(models.Model):
     thread = models.ForeignKey(ForumThread, on_delete=models.CASCADE, null=True)
     datetime_created = models.DateTimeField(default=timezone.now, editable=False)
     datetime_edited = models.DateTimeField(default=timezone.now)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=None) #Remove default?
     #Can a comment be commented on?
     # File upload PDF, other
 

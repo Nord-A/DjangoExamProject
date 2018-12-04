@@ -35,3 +35,7 @@ class ThreadForm(ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'question': forms.Textarea(attrs={'class': 'form-control'})
         }
+
+
+class CommentForm(forms.Form):
+    Comment = forms.Textarea(attrs={'class': 'form-control'}) #add widget?

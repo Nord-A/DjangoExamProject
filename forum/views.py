@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.db import models
 from .models import ForumThread #, ForumUser
-from .forms import ThreadForm
+from .forms import ThreadForm, CommentForm
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from users.models import User
@@ -101,6 +101,15 @@ def edit_thread(request, forum_thread_id):
 
 
 def view_thread(request, forum_thread_id):
+    #To add comment
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            current_user = request.user
+            comment = form.save(commit=False)
+            comment.owner = current_user
+            comment.save()
+    # else:
     thread = get_object_or_404(ForumThread, pk=forum_thread_id)
     thread.views_count += 1
     thread.save()
