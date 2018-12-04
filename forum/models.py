@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from users.models import User
+from django.contrib.auth.models import User
 
 
 # class ForumUser(models.Model):
