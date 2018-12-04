@@ -6,11 +6,19 @@
     <div class="container">
         <h1>View Thread Page!</h1>
         <h2>{{ thread.title }}</h2>
-        <h2>{{ thread.topic.name }}</h2>
-        <p>{{ thread.datetime_created }}</p>
-        <p>{{ thread.views_count }}</p>
-        <p>{{ thread.question }}</p>
-
+        <h3>Topic: {{ thread.topic.name }}</h3>
+        <p>Thread was created: {{ thread.datetime_created }}</p>
+        <p>Views: {{ thread.views_count }}</p>
+        <p><pre>{{ thread.question }}</pre></p>
+{#        | linebreaksbr#}
 {#        Fix comments#}
+        <div class="thread-comment">
+            <form method="POST">
+                <label for="textareaok">
+                    Write a Comment: <br>
+                    <textarea id="textareaok" class="form-control"> </textarea>
+                </label>
+            </form>
+        </div>
     </div>
 {% endblock content %}

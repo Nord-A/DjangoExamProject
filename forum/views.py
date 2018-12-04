@@ -7,6 +7,7 @@ from django.utils import timezone
 from users.models import User
 from django.forms.models import model_to_dict
 from django.http import HttpResponseForbidden
+from django.views.generic.list import ListView
 
 # def helper_user_has_permission(user):
 #     user.
@@ -129,3 +130,13 @@ def view_own_threads(request):
         'data': data
     }
     return render(request, 'forum/ownthreads.html', context)
+
+
+class ThreadsList(ListView):
+    model = ForumThread
+    # paginate_by = 50
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context

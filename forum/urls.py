@@ -13,7 +13,7 @@ urlpatterns = [
     path('thread/<int:forum_thread_id>/', views.view_thread, name='forum-viewthread'),
 
     # localhost:8000/forum/allthreads
-    path('allthreads/', views.view_all_threads, name='forum-viewallthreads'),
+    path('allthreads/', views.view_all_threads, name='forum-viewallthreads'), #, views.ThreadsList.as_view()
 
     # localhost:8000/forum/editthread || localhost:8000/editthread
     path('editthread/<int:forum_thread_id>', views.edit_thread, name='forum-editthread'),

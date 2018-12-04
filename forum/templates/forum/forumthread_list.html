@@ -1,0 +1,18 @@
+{% extends "forum/base.html" %}
+{% block title %}
+    <title>View All Threads</title>
+{% endblock title %}
+{% block content %}
+    <div class="container">
+        <h1>Allthreads page!</h1>
+        <table class="table">
+            {% for thread in object_list %}
+                <li>{{ thread.title }}</li>
+{#                <li>{{ thread.datetime_created|date }}</li>#}
+            {% empty %}
+                <li>No threads to display.</li>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock content %}
