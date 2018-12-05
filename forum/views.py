@@ -46,11 +46,11 @@ def create_thread(request):
             # new_thread = form.save()  # Save to DB
 
             #Trying to save with logged in user
-            # current_user = request.user  # Get current logged in user
+            current_user = request.user  # Get current logged in user
             # if current_user.is_authenticated():
 
             # current_user = ForumUser.objects.all()[0]  # Test user, remove after django user has been implemented
-            current_user = User.objects.all()[0]  # Test user, remove after django user has been implemented
+            # current_user = User.objects.all()[0]  # Test user, remove after django user has been implemented
             # Attempt 1
             new_thread = form.save(commit=False)  # returns object, does not save
             new_thread.owner = current_user
@@ -130,9 +130,9 @@ def view_own_threads(request):
     # data = get_list_or_404(ForumThread)
 
     # Trying to get current user
-    # current_user = request.user  # Get current logged in user
+    current_user = request.user  # Get current logged in user
     # if current_user.is_authenticated():
-    current_user = User.objects.all()[0]  # Test user, remove after django user has been implemented
+    # current_user = User.objects.all()[0]  # Test user, remove after django user has been implemented
 
     data = ForumThread.objects.filter(owner=current_user)
     context = {
