@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 #     email = models.EmailField()
 #     datetime_created = models.DateTimeField(default=timezone.now, editable=False)
 #     is_active = models.BooleanField(default=True)
-#     # image = models.ImageField()
+#     image = models.ImageField()
       #likes
 #
 #     def __str__(self):
