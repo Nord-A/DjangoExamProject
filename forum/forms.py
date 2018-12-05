@@ -1,6 +1,6 @@
 from django import forms
 from django.shortcuts import get_list_or_404
-from .models import Topic, ForumThread
+from .models import Topic, ForumThread, Comment
 from django.forms import ModelForm
 
 # class ThreadForm(forms.Form):
@@ -37,5 +37,12 @@ class ThreadForm(ModelForm):
         }
 
 
-class CommentForm(forms.Form):
-    Comment = forms.Textarea(attrs={'class': 'form-control'}) #add widget?
+# class CommentForm(forms.Form):
+#     Comment = forms.Textarea(attrs={'class': 'form-control'}) #add widget?
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'form-control'})
+        }

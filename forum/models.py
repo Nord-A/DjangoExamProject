@@ -60,6 +60,8 @@ class Comment(models.Model):
 
 
 class Rating(models.Model):
+    # likes = models.IntegerField()
+    # dislikes = models.IntegerField()
     thumps_up = models.BooleanField()
     # user = models.ForeignKey(ForumUser, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -67,4 +69,4 @@ class Rating(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.thumps_up
+        return self.thread.title + str(self.thumps_up)

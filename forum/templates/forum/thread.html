@@ -10,15 +10,33 @@
         <p>Thread was created: {{ thread.datetime_created }}</p>
         <p>Views: {{ thread.views_count }}</p>
         <p><pre>{{ thread.question }}</pre></p>
+        <div>
+            <p>{{ thread_ratings_count_positive }}</p>
+            <p>{{ thread_ratings_count_negative }}</p>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success" name="thread_rating_like">Like</button>
+            <button type="submit" class="btn btn-danger" name="thread_rating_dislike">Dislike</button>
+        </form>
 {#        | linebreaksbr#}
-{#        Fix comments#}
+
+{#        LOAD COMMENTS#}
+        <ul>
+        {% for comment in comments %}
+            <li>{{ comment.content }}</li>
+        {% endfor %}
+        </ul>
+
         <div class="thread-comment">
             <form method="POST">
-                <label for="textareaok">
-                    Write a Comment: <br>
-                    <textarea id="textareaok" class="form-control"> </textarea>
-                </label><br>
-                <button type="submit" class="btn btn-success">Submit</button>
+                {% csrf_token %}
+{#                <label for="textareaok">#}
+{#                    Write a Comment: <br>#}
+{#                    <textarea id="textareaok" class="form-control"> </textarea>#}
+{#                </label><br>#}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary" name="comment_submit">Submit</button>
             </form>
         </div>
     </div>

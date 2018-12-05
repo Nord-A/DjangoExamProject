@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.db import models
-from .models import ForumThread #, ForumUser
+from .models import ForumThread, Comment, Rating #, ForumUser
 from .forms import ThreadForm, CommentForm
 from django.http import HttpResponseRedirect
 from django.utils import timezone
@@ -91,9 +91,9 @@ def edit_thread(request, forum_thread_id):
         form = ThreadForm(initial=model_to_dict(thread)) #Remove model_to_dict?
 
         # Trying to validate logged in user
-        # current_user = request.user  # Get current logged in user
+        current_user = request.user  # Get current logged in user
         # if current_user.is_authenticated():
-        current_user = User.objects.all()[0]  # Test user, remove after django user has been implemented
+        # current_user = User.objects.all()[0]  # Test user, remove after django user has been implemented
         if current_user == thread.owner:
             return render(request, 'forum/newthread.html', {'form': form})  # Reuse HTML page or make new one?
         else:
@@ -103,17 +103,43 @@ def edit_thread(request, forum_thread_id):
 def view_thread(request, forum_thread_id):
     #To add comment
     if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
+        if 'comment_submit' in request.POST:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                thread = get_object_or_404(ForumThread, pk=forum_thread_id)
+                current_user = request.user
+                comment = form.save(commit=False)
+                comment.owner = current_user
+                comment.thread = thread
+                comment.save()
+        elif 'thread_rating_like' in request.POST or 'thread_rating_dislike' in request.POST:
+            the_rating = Rating()
+            if 'thread_rating_like' in request.POST:
+                the_rating.thumps_up = True
+            else:
+                the_rating.thumps_up = False
             current_user = request.user
-            comment = form.save(commit=False)
-            comment.owner = current_user
-            comment.save()
+            the_rating.user = current_user
+            thread = get_object_or_404(ForumThread, pk=forum_thread_id)
+            the_rating.thread = thread
+            the_rating.save()
     # else:
     thread = get_object_or_404(ForumThread, pk=forum_thread_id)
     thread.views_count += 1
     thread.save()
-    return render(request, 'forum/thread.html', {'thread': thread})
+    comments = Comment.objects.order_by("datetime_created").filter(thread=thread)
+
+    thread_ratings = Rating.objects.filter(thread=thread)
+    thread_ratings_count_positive = sum(i.thumps_up == 1 for i in thread_ratings)
+    thread_ratings_count_negative = sum(i.thumps_up == 0 for i in thread_ratings)
+    # comment_ratings = Rating.objects.filter(comment=)
+
+    #Comment form
+    form = CommentForm()
+    return render(request, 'forum/thread.html', {'thread': thread, 'comments': comments,
+                                                 'thread_ratings_count_positive': thread_ratings_count_positive,
+                                                 'thread_ratings_count_negative': thread_ratings_count_negative,
+                                                 'form': form})
 
 
 def view_all_threads(request):
