@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
+from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect, render_to_response
 from django.db import models
 from .models import ForumThread, Comment, Rating #, ForumUser
 from .forms import ThreadForm, CommentForm
@@ -169,3 +169,10 @@ class ThreadsList(ListView):
         context = super().get_context_data(**kwargs)
         context['now'] = timezone.now()
         return context
+
+
+# def handler404(request, exception, template_name="forum/404.html"):
+#     response = render_to_response("forum/404.html")
+#     response.status_code = 404
+#     return response
+
