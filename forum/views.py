@@ -102,10 +102,10 @@ def view_thread(request, forum_thread_id):
             current_user = request.user  # Get current logged in user
             if current_user.is_authenticated:
                 #NEW
-                find_rating = Rating.objects.filter(user=current_user)
+                thread = get_object_or_404(ForumThread, pk=forum_thread_id)
+                find_rating = Rating.objects.filter(user=current_user, thread=thread)
                 if find_rating == None:  # To ensure a user can only like or dislike a thread once.
                     the_rating.user = current_user
-                    thread = get_object_or_404(ForumThread, pk=forum_thread_id)
                     the_rating.thread = thread
                     the_rating.save()
             else:
@@ -158,7 +158,6 @@ def view_own_threads(request):
     else:
         # HttpResponseForbidden()return forbidden or not found? redirect?
         return redirect('login')
-
 
 
 class ThreadsList(ListView):

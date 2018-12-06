@@ -49,13 +49,18 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <a class="nav-item nav-link" href="{% url 'forum-index' %}">Index</a>
-            <a class="nav-item nav-link" href="{% url 'forum-createthread' %}">Create Thread</a>
             <a class="nav-item nav-link" href="{% url 'forum-viewallthreads' %}">View Threads</a>
-            <a class="nav-item nav-link" href="{% url 'forum-viewownthreads' %}">My Threads</a>
-            <a class="nav-item nav-link" href="{% url 'profile' %}">My Profile</a>
-            <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
-            <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-            <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+
+            {% if user.is_authenticated %}
+                <a class="nav-item nav-link" href="{% url 'forum-createthread' %}">Create Thread</a>
+                <a class="nav-item nav-link" href="{% url 'forum-viewownthreads' %}">My Threads</a>
+                <a class="nav-item nav-link" href="{% url 'profile' %}">My Profile</a>
+                <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+            {% endif %}
+
         </div>
       </div>
     </nav>

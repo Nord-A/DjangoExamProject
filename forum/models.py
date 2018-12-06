@@ -3,20 +3,6 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
-# class ForumUser(models.Model):
-#     name = models.CharField(max_length=30)
-#     username = models.CharField(max_length=20)
-#     password = models.CharField(max_length=20)
-#     email = models.EmailField()
-#     datetime_created = models.DateTimeField(default=timezone.now, editable=False)
-#     is_active = models.BooleanField(default=True)
-#     image = models.ImageField()
-      #likes
-#
-#     def __str__(self):
-#         return self.username
-
-
 class Topic(models.Model):
     name = models.CharField(max_length=30)
 

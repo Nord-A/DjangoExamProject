@@ -16,14 +16,16 @@
         </div>
 
 {#      Like/Dislike#}
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success" name="thread_rating_like">
-                <span class="glyphicon glyphicon-thumbs-up"></span> Like
-            </button>
-            <button type="submit" class="btn btn-danger" name="thread_rating_dislike">Dislike</button>
-        </form>
+        {% if user.is_authenticated %}
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success" name="thread_rating_like">
+                    <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                </button>
+                <button type="submit" class="btn btn-danger" name="thread_rating_dislike">Dislike</button>
+            </form>
 {#        | linebreaksbr#}
+        {% endif %}
 
 {#      Show comments#}
         <ul>
@@ -32,17 +34,20 @@
         {% endfor %}
         </ul>
 
+
 {#      Write comment#}
-        <div class="thread-comment">
-            <form method="POST">
-                {% csrf_token %}
-{#                <label for="textareaok">#}
-{#                    Write a Comment: <br>#}
-{#                    <textarea id="textareaok" class="form-control"> </textarea>#}
-{#                </label><br>#}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary" name="comment_submit">Submit</button>
-            </form>
-        </div>
+        {% if user.is_authenticated %}
+            <div class="thread-comment">
+                <form method="POST">
+                    {% csrf_token %}
+    {#                <label for="textareaok">#}
+    {#                    Write a Comment: <br>#}
+    {#                    <textarea id="textareaok" class="form-control"> </textarea>#}
+    {#                </label><br>#}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary" name="comment_submit">Submit</button>
+                </form>
+            </div>
+        {% endif %}
     </div>
 {% endblock content %}
