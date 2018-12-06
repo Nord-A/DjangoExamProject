@@ -14,20 +14,25 @@
             <p>{{ thread_ratings_count_positive }}</p>
             <p>{{ thread_ratings_count_negative }}</p>
         </div>
+
+{#      Like/Dislike#}
         <form method="POST">
             {% csrf_token %}
-            <button type="submit" class="btn btn-success" name="thread_rating_like">Like</button>
+            <button type="submit" class="btn btn-success" name="thread_rating_like">
+                <span class="glyphicon glyphicon-thumbs-up"></span> Like
+            </button>
             <button type="submit" class="btn btn-danger" name="thread_rating_dislike">Dislike</button>
         </form>
 {#        | linebreaksbr#}
 
-{#        LOAD COMMENTS#}
+{#      Show comments#}
         <ul>
         {% for comment in comments %}
             <li>{{ comment.content }}</li>
         {% endfor %}
         </ul>
 
+{#      Write comment#}
         <div class="thread-comment">
             <form method="POST">
                 {% csrf_token %}
