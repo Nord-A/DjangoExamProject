@@ -160,6 +160,7 @@ def view_own_threads(request):
         return redirect('login')
 
 
+#Example of ListView. This requires forumthread_list.html and the model ForumThread
 class ThreadsList(ListView):
     model = ForumThread
     # paginate_by = 50
