@@ -16,16 +16,39 @@
         </div>
 
 {#      Like/Dislike#}
-        {% if user.is_authenticated %}
-            <form method="POST">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success" name="thread_rating_like">
-                    <span class="glyphicon glyphicon-thumbs-up"></span> Like
-                </button>
-                <button type="submit" class="btn btn-danger" name="thread_rating_dislike">Dislike</button>
-            </form>
+{#        {% if user.is_authenticated %}#}
+{#            <form method="POST">#}
+{#                {% csrf_token %}#}
+{#                <button type="submit" class="btn btn-success" name="thread_rating_like">#}
+{#                    <span class="glyphicon glyphicon-thumbs-up"></span> Like#}
+{#                </button>#}
+{#                <button type="submit" class="btn btn-danger" name="thread_rating_dislike">Dislike</button>#}
+{#            </form>#}
 {#        | linebreaksbr#}
+{#        {% endif %}#}
+
+        {% if user.is_authenticated %}
+            {% if current_thread_rating == 'positive'%}
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success" name="thread_rating_like">Like</button>
+                    <button type="submit" class="btn btn-default" name="thread_rating_dislike">Dislike</button>
+                </form>
+            {% elif current_thread_rating == 'negative'%}
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-default" name="thread_rating_like">Like</button>
+                    <button type="submit" class="btn btn-danger" name="thread_rating_dislike">Dislike</button>
+                </form>
+            {% else %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success" name="thread_rating_like">Like</button>
+                    <button type="submit" class="btn btn-danger" name="thread_rating_dislike">Dislike</button>
+                </form>
+            {% endif %}
         {% endif %}
+
 
 {#      Show comments#}
         <ul>

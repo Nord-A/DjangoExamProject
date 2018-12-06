@@ -22,6 +22,8 @@ def index(request):
 
 #Look into class based views?
 def create_thread(request):
+    current_user = request.user  # Get current logged in user
+
     if request.method == 'POST':
         form = ThreadForm(request.POST)
         if form.is_valid():
@@ -29,16 +31,16 @@ def create_thread(request):
             # new_thread = form.save()  # Save to DB
 
             #Trying to save with logged in user
-            current_user = request.user  # Get current logged in user
-            if current_user.is_authenticated:
-            # Attempt 1
-                new_thread = form.save(commit=False)  # returns object, does not save
-                new_thread.owner = current_user
-                new_thread.save()  # Save to DB
+            new_thread = form.save(commit=False)  # returns object, does not save
+            new_thread.owner = current_user
+            new_thread.save()  # Save to DB
         return HttpResponseRedirect('/thread/{}'.format(new_thread.id))  # Make successpage?
     else:
-        form = ThreadForm()
-        return render(request, 'forum/newthread.html', {'form': form})
+        if current_user.is_authenticated:
+            form = ThreadForm()
+            return render(request, 'forum/newthread.html', {'form': form})
+        else:
+            return redirect('login')
 
 
 def edit_thread(request, forum_thread_id):
@@ -53,13 +55,6 @@ def edit_thread(request, forum_thread_id):
             updated_thread_withdate = updated_thread.save(commit=False)  # returns object, does not save
             updated_thread_withdate.datetime_edited = timezone.now()
             updated_thread_withdate.save()
-
-            # Alternative to updating datetime_edited
-            # title = updated_thread.cleaned_data['title']
-            # topic = updated_thread.cleaned_data['topic']
-            # question = updated_thread.cleaned_data['question']
-            # the_thread = ForumThread(title=title, topic=topic, question=question, datetime_edited=timezone.now())
-            # the_thread.save()
         return HttpResponseRedirect('/thread/{}'.format(updated_thread_withdate.id))  # Make successpage?
     else:
         thread = get_object_or_404(ForumThread, pk=forum_thread_id)
@@ -77,63 +72,104 @@ def edit_thread(request, forum_thread_id):
 
 
 def view_thread(request, forum_thread_id):
-    #To add comment
-
     #Get currentuser here instead and if current_user.is_authenticated: to shorten code.
     if request.method == 'POST':
-        if 'comment_submit' in request.POST:
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                thread = get_object_or_404(ForumThread, pk=forum_thread_id)
-                current_user = request.user  # Get current logged in user
-                if current_user.is_authenticated:
+        current_user = request.user  # Get current logged in user
+        if current_user.is_authenticated:
+            thread = get_object_or_404(ForumThread, pk=forum_thread_id)  # Get thread from DB
+
+            if 'comment_submit' in request.POST:
+                form = CommentForm(request.POST)
+                if form.is_valid():
                     comment = form.save(commit=False)
                     comment.owner = current_user
                     comment.thread = thread
                     comment.save()
+            elif 'thread_rating_like' in request.POST or 'thread_rating_dislike' in request.POST:
+                the_rating = Rating()
+                if 'thread_rating_like' in request.POST:
+                    the_rating.thumps_up = True
                 else:
-                    return redirect('login')
-        elif 'thread_rating_like' in request.POST or 'thread_rating_dislike' in request.POST:
-            the_rating = Rating()
-            if 'thread_rating_like' in request.POST:
-                the_rating.thumps_up = True
-            else:
-                the_rating.thumps_up = False
-            current_user = request.user  # Get current logged in user
-            if current_user.is_authenticated:
-                #NEW
-                thread = get_object_or_404(ForumThread, pk=forum_thread_id)
+                    the_rating.thumps_up = False
                 find_rating = Rating.objects.filter(user=current_user, thread=thread)
-                if find_rating == None:  # To ensure a user can only like or dislike a thread once.
+                if len(find_rating) == 0:  # To ensure a user can only like or dislike a thread once.
                     the_rating.user = current_user
                     the_rating.thread = thread
                     the_rating.save()
-            else:
-                return redirect('login')
+                else:
+                    old_rating = find_rating[0]
+                    old_rating.thumps_up = the_rating.thumps_up
+                    old_rating.save()
+
+            #Make elif here if ratings on comments is implemented?
+        else:  # If user is not logged in, redirect to login page
+            return redirect('login')
+        # if 'comment_submit' in request.POST:
+        #     form = CommentForm(request.POST)
+        #     if form.is_valid():
+        #         thread = get_object_or_404(ForumThread, pk=forum_thread_id)
+        #         current_user = request.user  # Get current logged in user
+        #         if current_user.is_authenticated:
+        #             comment = form.save(commit=False)
+        #             comment.owner = current_user
+        #             comment.thread = thread
+        #             comment.save()
+        #         else:
+        #             return redirect('login')
+        # elif 'thread_rating_like' in request.POST or 'thread_rating_dislike' in request.POST:
+        #     the_rating = Rating()
+        #     if 'thread_rating_like' in request.POST:
+        #         the_rating.thumps_up = True
+        #     else:
+        #         the_rating.thumps_up = False
+        #     current_user = request.user  # Get current logged in user
+        #     if current_user.is_authenticated:
+        #         #NEW
+        #         thread = get_object_or_404(ForumThread, pk=forum_thread_id)
+        #         find_rating = Rating.objects.filter(user=current_user, thread=thread)
+        #         if find_rating == None:  # To ensure a user can only like or dislike a thread once.
+        #             the_rating.user = current_user
+        #             the_rating.thread = thread
+        #             the_rating.save()
+        #     else:
+        #         return redirect('login')
     # else:
-    thread = get_object_or_404(ForumThread, pk=forum_thread_id)
+    thread = get_object_or_404(ForumThread, pk=forum_thread_id)  # Get thread from DB
     thread.views_count += 1
     thread.save()
-    comments = Comment.objects.order_by("datetime_created").filter(thread=thread)
+    comments = Comment.objects.order_by("datetime_created").filter(thread=thread)  # Get comments from DB
 
-    thread_ratings = Rating.objects.filter(thread=thread)
+    thread_ratings = Rating.objects.filter(thread=thread)  # Get ratings from DB
     thread_ratings_count_positive = sum(i.thumps_up == 1 for i in thread_ratings)
     thread_ratings_count_negative = sum(i.thumps_up == 0 for i in thread_ratings)
-    # comment_ratings = Rating.objects.filter(comment=)
 
+    #NEW
+    #This is to show if user has clicked on like or dislike button
+    current_thread_rating = 'none'
+    current_user = request.user  # Get current logged in user
+    if current_user.is_authenticated:
+        find_rating = Rating.objects.filter(user=current_user, thread=thread)
+        if len(find_rating) != 0:
+            if find_rating[0].thumps_up:
+                current_thread_rating = 'positive'
+            else:
+                current_thread_rating = 'negative'
+
+    #Ratings on comments missing
+
+    # comment_ratings = Rating.objects.filter(comment=)
     # context = make the dictionary here and pass to render method instead?
-    #Comment form
     form = CommentForm()
     return render(request, 'forum/thread.html', {'thread': thread, 'comments': comments,
                                                  'thread_ratings_count_positive': thread_ratings_count_positive,
                                                  'thread_ratings_count_negative': thread_ratings_count_negative,
-                                                 'form': form})
+                                                 'form': form, 'current_thread_rating': current_thread_rating})
 
 
 def view_all_threads(request):
-    # Get threads from DB
-    data = get_list_or_404(ForumThread)
+    data = get_list_or_404(ForumThread)  # Get threads from DB
 
+    # Complex task to get all ratings and display with the threads?
     # thread_ratings = Rating.objects.filter(thread=data)
     # thread_ratings_count_positive = sum(i.thumps_up == 1 for i in thread_ratings)
     # thread_ratings_count_negative = sum(i.thumps_up == 0 for i in thread_ratings)
@@ -148,7 +184,6 @@ def view_all_threads(request):
 
 def view_own_threads(request):
     current_user = request.user  # Get current logged in user
-    #NEW
     if current_user.is_authenticated:
         data = ForumThread.objects.filter(owner=current_user)  # Get threads from DB
         context = {
@@ -156,11 +191,10 @@ def view_own_threads(request):
         }
         return render(request, 'forum/ownthreads.html', context)
     else:
-        # HttpResponseForbidden()return forbidden or not found? redirect?
         return redirect('login')
 
 
-#Example of ListView. This requires forumthread_list.html and the model ForumThread
+#Example of ListView. This requires forumthread_list.html and the model ForumThread. Method is not used
 class ThreadsList(ListView):
     model = ForumThread
     # paginate_by = 50
