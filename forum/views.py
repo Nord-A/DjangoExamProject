@@ -104,36 +104,6 @@ def view_thread(request, forum_thread_id):
             #Make elif here if ratings on comments is implemented?
         else:  # If user is not logged in, redirect to login page
             return redirect('login')
-        # if 'comment_submit' in request.POST:
-        #     form = CommentForm(request.POST)
-        #     if form.is_valid():
-        #         thread = get_object_or_404(ForumThread, pk=forum_thread_id)
-        #         current_user = request.user  # Get current logged in user
-        #         if current_user.is_authenticated:
-        #             comment = form.save(commit=False)
-        #             comment.owner = current_user
-        #             comment.thread = thread
-        #             comment.save()
-        #         else:
-        #             return redirect('login')
-        # elif 'thread_rating_like' in request.POST or 'thread_rating_dislike' in request.POST:
-        #     the_rating = Rating()
-        #     if 'thread_rating_like' in request.POST:
-        #         the_rating.thumps_up = True
-        #     else:
-        #         the_rating.thumps_up = False
-        #     current_user = request.user  # Get current logged in user
-        #     if current_user.is_authenticated:
-        #         #NEW
-        #         thread = get_object_or_404(ForumThread, pk=forum_thread_id)
-        #         find_rating = Rating.objects.filter(user=current_user, thread=thread)
-        #         if find_rating == None:  # To ensure a user can only like or dislike a thread once.
-        #             the_rating.user = current_user
-        #             the_rating.thread = thread
-        #             the_rating.save()
-        #     else:
-        #         return redirect('login')
-    # else:
     thread = get_object_or_404(ForumThread, pk=forum_thread_id)  # Get thread from DB
     thread.views_count += 1
     thread.save()
@@ -143,7 +113,6 @@ def view_thread(request, forum_thread_id):
     thread_ratings_count_positive = sum(i.thumps_up == 1 for i in thread_ratings)
     thread_ratings_count_negative = sum(i.thumps_up == 0 for i in thread_ratings)
 
-    #NEW
     #This is to show if user has clicked on like or dislike button
     current_thread_rating = 'none'
     current_user = request.user  # Get current logged in user
