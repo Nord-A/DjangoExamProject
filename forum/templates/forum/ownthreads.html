@@ -10,7 +10,7 @@
         <thead>
             <tr>
                 <th>Views</th>
-{#                <th>Poppularity/Likes</th>#}
+                <th>Popularity</th>
                 <th>Title</th>
                 <th>Asked</th>
                 <th></th>
@@ -19,7 +19,7 @@
         {% for thread in data %}
             <tr>
                 <td>{{ thread.views_count }}</td>
-{#                <td>{{ thread.likes }}</td>#}
+                <td>Likes:{{ thread.thread_ratings_count_positive }} Dislikes: {{ thread.thread_ratings_count_negative }}</td>
                 <td><a href="{% url 'forum-viewthread' forum_thread_id=thread.id %}">{{ thread.title }}</a></td>
                 <td>{{ thread.datetime_created }}</td>
                 <td><a href="{% url 'forum-editthread' thread.id %}" class='btn btn-primary'>Edit</a></td>

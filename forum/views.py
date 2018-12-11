@@ -91,13 +91,14 @@ def view_thread(request, forum_thread_id):
                     the_rating.thumps_up = True
                 else:
                     the_rating.thumps_up = False
+
                 find_rating = Rating.objects.filter(user=current_user, thread=thread)
                 if len(find_rating) == 0:  # To ensure a user can only like or dislike a thread once.
                     the_rating.user = current_user
                     the_rating.thread = thread
                     the_rating.save()
                 else:
-                    old_rating = find_rating[0]
+                    old_rating = find_rating[0]  # find_rating is a list?? with only one item, so index 0 is that item.
                     old_rating.thumps_up = the_rating.thumps_up
                     old_rating.save()
 
@@ -138,10 +139,23 @@ def view_thread(request, forum_thread_id):
 def view_all_threads(request):
     data = get_list_or_404(ForumThread)  # Get threads from DB
 
-    # Complex task to get all ratings and display with the threads?
-    # thread_ratings = Rating.objects.filter(thread=data)
-    # thread_ratings_count_positive = sum(i.thumps_up == 1 for i in thread_ratings)
-    # thread_ratings_count_negative = sum(i.thumps_up == 0 for i in thread_ratings)
+    # Complex task to get all ratings and display with the threads? Make viewmodel for threads perhaps?
+    # dictionary = {}
+    # for i in range(len(data)):
+    #     thread_ratings = Rating.objects.filter(thread=i)
+    #     thread_ratings_count_positive = sum(i.thumps_up == 1 for i in thread_ratings)
+    #     thread_ratings_count_negative = sum(i.thumps_up == 0 for i in thread_ratings)
+    #     dictionary['hej': thread_ratings_count_positive]
+
+    #Another approach to displaying the ratings
+    for thread in data:
+        thread_ratings = Rating.objects.filter(thread=thread)
+        thread_ratings_count_positive = sum(i.thumps_up == 1 for i in thread_ratings)
+        thread_ratings_count_negative = sum(i.thumps_up == 0 for i in thread_ratings)
+
+        #Attributes are added to the ForumThread model, no viewmodel is needed
+        thread.thread_ratings_count_positive = thread_ratings_count_positive
+        thread.thread_ratings_count_negative = thread_ratings_count_negative
 
     context = {
         'data': data,
@@ -155,6 +169,17 @@ def view_own_threads(request):
     current_user = request.user  # Get current logged in user
     if current_user.is_authenticated:
         data = ForumThread.objects.filter(owner=current_user)  # Get threads from DB
+
+        # Another approach to displaying the ratings
+        for thread in data:
+            thread_ratings = Rating.objects.filter(thread=thread)
+            thread_ratings_count_positive = sum(i.thumps_up == 1 for i in thread_ratings)
+            thread_ratings_count_negative = sum(i.thumps_up == 0 for i in thread_ratings)
+
+            # Attributes are added to the ForumThread model, no viewmodel is needed
+            thread.thread_ratings_count_positive = thread_ratings_count_positive
+            thread.thread_ratings_count_negative = thread_ratings_count_negative
+
         context = {
             'data': data
         }

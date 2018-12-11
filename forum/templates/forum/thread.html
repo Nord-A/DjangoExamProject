@@ -9,6 +9,7 @@
         <h3>Topic: {{ thread.topic.name }}</h3>
         <p>Thread was created: {{ thread.datetime_created }}</p>
         <p>Views: {{ thread.views_count }}</p>
+        <p>Asked by: {{ thread.owner }}</p>
         <p><pre>{{ thread.question }}</pre></p>
         <div>
             <p>Likes: {{ thread_ratings_count_positive }}</p>
