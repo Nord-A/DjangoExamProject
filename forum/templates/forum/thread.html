@@ -14,8 +14,8 @@
             <p>Asked by: {{ thread.owner }}</p>
             <p><pre>{{ thread.question }}</pre></p>
             <div>
-                <p>Likes: {{ thread_ratings_count_positive }}</p>
-                <p>Dislikes: {{ thread_ratings_count_negative }}</p>
+                <p>Likes: {{ thread.thread_ratings_count_positive }}</p>
+                <p>Dislikes: {{ thread.thread_ratings_count_negative }}</p>
             </div>
         </div>
 {#      Like/Dislike the thread#}

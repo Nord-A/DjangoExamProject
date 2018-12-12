@@ -31,26 +31,16 @@ class ForumThread(models.Model):
     #     self.datetime_edited = timezone.now()
     #     return super(ForumThread, self).save(*args, **kwargs)
 
-    # def add_ratings_count(self):
-    #     thread_ratings = Rating.objects.filter(thread=self)
-    #     thread_ratings_count_positive = sum(i.thumps_up == 1 for i in thread_ratings)
-    #     thread_ratings_count_negative = sum(i.thumps_up == 0 for i in thread_ratings)
-    #
-    #     # Attributes are added to the ForumThread model, no viewmodel is needed
-    #     self.thread_ratings_count_positive = thread_ratings_count_positive
-    #     self.thread_ratings_count_negative = thread_ratings_count_negative
-    #     return self
+    # Adds new attributes to model: thread_ratings_count_positive, thread_ratings_count_negative
+    def sum_count_ratings(self):
+        thread_ratings = Rating.objects.filter(thread=self)
+        self.thread_ratings_count_positive = sum(i.thumps_up == 1 for i in thread_ratings)
+        self.thread_ratings_count_negative = sum(i.thumps_up == 0 for i in thread_ratings)
 
-#Viewmodel is needed to help display ratings when many ForumThreads has to be displayed(for example in allthreads.html)
-# class ForumThreadViewModel:
-#     def __init__(self, topic, title, owner, datetime_created, views_count, likes_count, dislikes_count):
-#         self.topic = topic
-#         self.title = title
-#         self.owner = owner
-#         self.datetime_created = datetime_created
-#         self.views_count = views_count
-#         self.likes_count = likes_count
-#         self.dislikes_count = dislikes_count
+        # Attributes are added to the ForumThread model, no viewmodel is needed
+        # self.thread_ratings_count_positive = thread_ratings_count_positive
+        # self.thread_ratings_count_negative = thread_ratings_count_negative
+        # return self  # Do not return anything?
 
 
 class Comment(models.Model):
@@ -64,6 +54,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content
+
+    # Adds new attributes to model: comment_ratings_count_positive, comment_ratings_count_negative
+    def sum_count_ratings(self):
+        comment_ratings = Rating.objects.filter(comment=self)
+        self.comment_ratings_count_positive = sum(i.thumps_up == 1 for i in comment_ratings)
+        self.comment_ratings_count_negative = sum(i.thumps_up == 0 for i in comment_ratings)
 
 
 class Rating(models.Model):
