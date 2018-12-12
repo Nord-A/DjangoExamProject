@@ -7,11 +7,36 @@ h1 {
     color:green;
 }
 
-.thread-comment textarea{
-    width: 400px;
-    height: 200px;
+/*.thread-comment textarea{*/
+    /*width: 400px;*/
+    /*height: 200px;*/
+/*}*/
+
+.thread-initial-post {
+    border-bottom-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+
+.thread-comment-content {
+    /*border: ;*/
+    /*border-;*/
+    border-style: solid;
+    border-color: lightgrey;
+    border-width: 1px;
+    padding-left: 3px;
+    display: inline-block;
+}
+
+.thread-comment-all {
+    padding-top: 30px;
 }
 
 .navigation-bar-custom{
     background-color: green;
 }
+
+/*.new-thread-content {*/
+    /*white-space: pre-wrap;*/
+    /*white-space: pre;*/
+/*}*/

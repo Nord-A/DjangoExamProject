@@ -4,19 +4,21 @@
 {% endblock title %}
 {% block content %}
     <div class="container">
-        <h1>View Thread Page!</h1>
-        <h2>{{ thread.title }}</h2>
-        <h3>Topic: {{ thread.topic.name }}</h3>
-        <p>Thread was created: {{ thread.datetime_created }}</p>
-        <p>Views: {{ thread.views_count }}</p>
-        <p>Asked by: {{ thread.owner }}</p>
-        <p><pre>{{ thread.question }}</pre></p>
-        <div>
-            <p>Likes: {{ thread_ratings_count_positive }}</p>
-            <p>Dislikes: {{ thread_ratings_count_negative }}</p>
-        </div>
 
-{#      Like/Dislike#}
+        <div class="thread-initial-post">
+            <h1>View Thread Page!</h1>
+            <h2>{{ thread.title }}</h2>
+            <h3>Topic: {{ thread.topic.name }}</h3>
+            <p>Thread was created: {{ thread.datetime_created }}</p>
+            <p>Views: {{ thread.views_count }}</p>
+            <p>Asked by: {{ thread.owner }}</p>
+            <p><pre>{{ thread.question }}</pre></p>
+            <div>
+                <p>Likes: {{ thread_ratings_count_positive }}</p>
+                <p>Dislikes: {{ thread_ratings_count_negative }}</p>
+            </div>
+        </div>
+{#      Like/Dislike the thread#}
 {#        {% if user.is_authenticated %}#}
 {#            <form method="POST">#}
 {#                {% csrf_token %}#}
@@ -28,6 +30,7 @@
 {#        | linebreaksbr#}
 {#        {% endif %}#}
 
+{#      Multiple forms to show if user has clicked on like or dislike button (thread)#}
         {% if user.is_authenticated %}
             {% if current_thread_rating == 'positive'%}
                 <form method="POST">
@@ -44,19 +47,63 @@
             {% else %}
                 <form method="POST">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-success" name="thread_rating_like">Like</button>
-                    <button type="submit" class="btn btn-danger" name="thread_rating_dislike">Dislike</button>
+                    <button type="submit" class="btn btn-default" name="thread_rating_like">Like</button>
+                    <button type="submit" class="btn btn-default" name="thread_rating_dislike">Dislike</button>
                 </form>
             {% endif %}
         {% endif %}
 
 
 {#      Show comments#}
-        <ul>
+{#        <ul>#}
         {% for comment in comments %}
-            <li>{{ comment.content }}</li>
+{#            <li>{{ comment.content }}</li>#}
+            <div class="thread-comment-all">
+                <div class="thread-comment-content">
+                    <pre>{{ comment.content}}</pre>
+{#                    |linebreaksbr #}
+                </div><br>
+                {#      Comment ratings#}
+    {#            <li>Likes:{{ comment.comment_ratings_count_positive }} Dislikes: comment.comment_ratings_count_negative</li>#}
+                Likes:{{ comment.comment_ratings_count_positive }} Dislikes: {{ comment.comment_ratings_count_negative }}
+
+{#                {% if user.is_authenticated %}#}
+{#                    <form method="POST">#}
+{#                        {% csrf_token %}#}
+{#                        <input type="hidden" name="comment_id" value="{{ comment.id }}">#}
+{#                        <button type="submit" class="btn btn-success" name="comment_rating_like">Like</button>#}
+{#                        <button type="submit" class="btn btn-danger" name="comment_rating_dislike">Dislike</button>#}
+{#                    </form>#}
+{#                {% endif %}#}
+
+{#              Multiple forms to show if user has clicked on like or dislike button (comments)#}
+                {% if user.is_authenticated %}
+                    {% if comment.current_comment_rating == 'positive'%}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <button type="submit" class="btn btn-success" name="comment_rating_like">Like</button>
+                            <button type="submit" class="btn btn-default" name="comment_rating_dislike">Dislike</button>
+                        </form>
+                    {% elif comment.current_comment_rating == 'negative'%}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <button type="submit" class="btn btn-default" name="comment_rating_like">Like</button>
+                            <button type="submit" class="btn btn-danger" name="comment_rating_dislike">Dislike</button>
+                        </form>
+                    {% else %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                            <button type="submit" class="btn btn-default" name="comment_rating_like">Like</button>
+                            <button type="submit" class="btn btn-default" name="comment_rating_dislike">Dislike</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
         {% endfor %}
-        </ul>
+{#        </ul>#}
 
 
 {#      Write comment#}
@@ -68,7 +115,9 @@
     {#                    Write a Comment: <br>#}
     {#                    <textarea id="textareaok" class="form-control"> </textarea>#}
     {#                </label><br>#}
+{#                    <pre>#}
                     {{ form.as_p }}
+{#                    </pre>#}
                     <button type="submit" class="btn btn-primary" name="comment_submit">Submit</button>
                 </form>
             </div>
