@@ -98,26 +98,3 @@ class Test_Reponse_Codes(TestCase):
 #         new_thread = form.save(commit=False)
 #         new_thread.owner_id = self.userid
 #         self.assertTrue(form == self.forum_thread)  # Expects form.is_valid() to be True
-
-
-# class TestBasic2(unittest.TestCase):
-#     "Show setup and teardown"
-#
-#     def setUp(self):
-#         self.a = 1
-#
-#     def tearDown(self):
-#         del self.a
-#
-#     def test_basic1(self):
-#         "Basic with setup"
-#
-#         self.assertNotEqual(self.a, 2)
-#
-#     def test_basic2(self):
-#         "Basic2 with setup"
-#         assert self.a != 2
-#
-#     def test_fail(self):
-#         "This test should fail"
-#         assert self.a == 2
