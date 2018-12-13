@@ -40,3 +40,11 @@ h1 {
     /*white-space: pre-wrap;*/
     /*white-space: pre;*/
 /*}*/
+
+.new-thread-content2 {
+    /*white-space: pre-wrap;*/
+    white-space: pre;
+    width: 1100px;
+    height: 700px;
+    display: block;
+}
